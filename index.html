@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LabMobile - Platform Manajemen Laboratorium Medis</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#1e293b',
+                            900: '#1A365D',
+                        },
+                        cyan: {
+                            500: '#00A896',
+                            600: '#028090',
+                        },
+                        medical: {
+                            bg: '#F8FAFC',
+                            card: '#FFFFFF',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar & Mobile Frame Styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .tube-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="h-full bg-slate-900 text-slate-800 flex justify-center items-center p-0 sm:p-4">
+
+    <!-- Mobile Device Container Wrapper -->
+    <div class="w-full max-w-md h-full sm:h-[880px] bg-slate-50 sm:rounded-[36px] shadow-2xl flex flex-col overflow-hidden relative border-0 sm:border-8 sm:border-slate-800">
+        
+        <!-- Top Status Bar Mockup (Mobile look) -->
+        <div class="bg-navy-900 text-white px-5 pt-3 pb-2 flex justify-between items-center text-xs font-semibold z-50">
+            <span>09:41</span>
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full text-green-400"></i>
+            </div>
+        </div>
+
+        <!-- System Role Switcher Header -->
+        <div class="bg-navy-900 text-white px-4 py-3 shadow-md z-40 border-t border-slate-700/50 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="bg-cyan-500 text-white p-1.5 rounded-lg font-bold text-sm flex items-center justify-center w-7 h-7">
+                    <i class="fas fa-microscope text-xs"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm leading-tight tracking-wide">LabMobile<span class="text-cyan-400">.id</span></h1>
+                    <p class="text-[10px] text-slate-300">Sistem Informasi Laboratorium</p>
+                </div>
+            </div>
+
+            <!-- Portal Switcher Toggle -->
+            <div class="bg-slate-800/80 p-1 rounded-full flex items-center border border-slate-700 text-xs">
+                <button id="btn-consumer-mode" onclick="switchPortal('consumer')" class="px-3 py-1 rounded-full font-medium transition-all duration-200 text-white bg-cyan-500 shadow-sm flex items-center gap-1">
+                    <i class="fas fa-user text-[10px]"></i> Pasien
+                </button>
+                <button id="btn-staff-mode" onclick="switchPortal('staff')" class="px-3 py-1 rounded-full font-medium transition-all duration-200 text-slate-400 hover:text-white flex items-center gap-1">
+                    <i class="fas fa-user-md text-[10px]"></i> Nakes
+                </button>
+            </div>
+        </div>
+
+        <!-- MAIN SCROLLABLE CONTENT AREA -->
+        <div id="main-container" class="flex-1 overflow-y-auto hide-scrollbar relative pb-20 bg-slate-50">
+            
+            <!-- ========================================== -->
+            <!-- 1. CONSUMER / PATIENT VIEW (HALO DOK STYLE)-->
+            <!-- ========================================== -->
+            <div id="portal-consumer" class="block">
+                
+                <!-- Header Greeting & Search -->
+                <div class="bg-navy-900 text-white px-4 pt-2 pb-6 rounded-b-3xl shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-location-dot text-cyan-400 text-xs"></i>
+                            <span class="text-xs text-slate-200 font-medium">Jakarta Selatan, DKI Jakarta</span>
+                            <i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
+                        </div>
+                        <button class="relative p-1.5 bg-slate-800/60 rounded-full text-slate-300 hover:text-white">
+                            <i class="fas fa-bell text-xs"></i>
+                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+
+                    <div class="mb-3">
+                        <h2 class="text-base font-bold">Halo, Ahmad Rizky 👋</h2>
+                        <p class="text-xs text-slate-300">Mau reservasi pemeriksaan lab apa hari ini?</p>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="relative">
+                        <input type="text" id="patient-search-input" onkeyup="filterPackages()" placeholder="Cari tes (mis: Kolesterol, Darah Lengkap, HbA1c)..." class="w-full pl-9 pr-4 py-2.5 bg-white text-slate-800 text-xs rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Live Track Banner (Active Order Preview) -->
+                <div class="px-4 -mt-3">
+                    <div class="bg-gradient-to-r from-cyan-600 to-teal-600 rounded-2xl p-3 text-white shadow-lg flex items-center justify-between cursor-pointer" onclick="showLiveTrackerModal()">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-white/20 p-2.5 rounded-xl">
+                                <i class="fas fa-flask text-white text-base animate-pulse"></i>
+                            </div>
+                            <div>
+                                <span class="bg-white/20 text-[9px] uppercase px-2 py-0.5 rounded-full font-bold tracking-wider">Status Pesanan Aktif</span>
+                                <h4 class="text-xs font-bold mt-0.5">Tes Darah Lengkap & Gula</h4>
+                                <p class="text-[10px] text-teal-100"><i class="fas fa-clock mr-1"></i>Sampel sedang dianalisis</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-right text-xs text-teal-200"></i>
+                    </div>
+                </div>
+
+                <!-- Service Quick Categories Grid -->
+                <div class="px-4 mt-5">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Layanan Laboratorium</h3>
+                    <div class="grid grid-cols-4 gap-3 text-center">
+                        <div onclick="filterCategory('Hematologi')" class="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center hover:border-cyan-500 transition-all cursor-pointer">
+                            <div class="w-10 h-10 bg-red-50 text-red-500 rounded-xl flex items-center justify-center text-base mb-1.5">
+                                <i class="fas fa-droplet"></i>
+                            </div>
+                            <span class="text-[10px] font-semibold text-slate-700 leading-tight">Darah Lengkap</span>
+                        </div>
+                        <div onclick="filterCategory('Screening')" class="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center hover:border-cyan-500 transition-all cursor-pointer">
+                            <div class="w-10 h-10 bg-teal-50 text-cyan-600 rounded-xl flex items-center justify-center text-base mb-1.5">
+                                <i class="fas fa-heart-pulse"></i>
+                            </div>
+                            <span class="text-[10px] font-semibold text-slate-700 leading-tight">Paket MCU</span>
+                        </div>
+                        <div onclick="filterCategory('Home')" class="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center hover:border-cyan-500 transition-all cursor-pointer">
+                            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-base mb-1.5">
+                                <i class="fas fa-house-medical"></i>
+                            </div>
+                            <span class="text-[10px] font-semibold text-slate-700 leading-tight">Home Service</span>
+                        </div>
+                        <div onclick="filterCategory('Consult')" class="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center hover:border-cyan-500 transition-all cursor-pointer">
+                            <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-base mb-1.5">
+                                <i class="fas fa-user-doctor"></i>
+                            </div>
+                            <span class="text-[10px] font-semibold text-slate-700 leading-tight">Konsul Nakes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Test Packages -->
+                <div class="px-4 mt-6 mb-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Paket Pemeriksaan Populer</h3>
+                        <button onclick="resetFilters()" class="text-xs text-cyan-600 font-semibold hover:underline">Lihat Semua</button>
+                    </div>
+
+                    <div id="packages-list" class="space-y-3">
+                        <!-- Card 1 -->
+                        <div class="package-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 hover:shadow-md transition-all" data-name="paket kolesterol profil lipid jantung" data-cat="Hematologi">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="bg-amber-50 text-amber-600 text-[9px] font-bold px-2 py-0.5 rounded-md border border-amber-100">Bebas Puasa Opsional</span>
+                                    <h4 class="font-bold text-xs text-slate-800 mt-1">Paket Profil Lipid Lengkap</h4>
+                                    <p class="text-[10px] text-slate-500 mt-0.5">Kolesterol Total, HDL, LDL, Trigliserida</p>
+                                </div>
+                                <span class="bg-slate-100 text-slate-600 text-[10px] font-medium px-2 py-1 rounded-lg"><i class="fas fa-clock mr-1"></i>3 jam</span>
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-slate-100 flex justify-between items-center">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 line-through">Rp 280.000</span>
+                                    <div class="text-sm font-bold text-navy-900">Rp 195.000</div>
+                                </div>
+                                <button onclick="openBookingModal('Paket Profil Lipid Lengkap', 195000)" class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-3.5 py-1.5 rounded-xl text-xs transition-colors shadow-sm">
+                                    Pesan Now
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="package-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 hover:shadow-md transition-all" data-name="paket diabetes gula darah hba1c" data-cat="Screening">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="bg-cyan-50 text-cyan-600 text-[9px] font-bold px-2 py-0.5 rounded-md border border-cyan-100">Rekomendasi Dokter</span>
+                                    <h4 class="font-bold text-xs text-slate-800 mt-1">Paket Skrining Diabetes & HbA1c</h4>
+                                    <p class="text-[10px] text-slate-500 mt-0.5">Glukosa Puasa, Glukosa 2 Jam PP, HbA1c</p>
+                                </div>
+                                <span class="bg-slate-100 text-slate-600 text-[10px] font-medium px-2 py-1 rounded-lg"><i class="fas fa-clock mr-1"></i>2 jam</span>
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-slate-100 flex justify-between items-center">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 line-through">Rp 350.000</span>
+                                    <div class="text-sm font-bold text-navy-900">Rp 249.000</div>
+                                </div>
+                                <button onclick="openBookingModal('Paket Skrining Diabetes & HbA1c', 249000)" class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-3.5 py-1.5 rounded-xl text-xs transition-colors shadow-sm">
+                                    Pesan Now
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="package-card bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 hover:shadow-md transition-all" data-name="mcu lengkap hematologi ginjal hati urine" data-cat="Screening">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="bg-purple-50 text-purple-600 text-[9px] font-bold px-2 py-0.5 rounded-md border border-purple-100">Home Service Gratis</span>
+                                    <h4 class="font-bold text-xs text-slate-800 mt-1">Medical Check Up Essential</h4>
+                                    <p class="text-[10px] text-slate-500 mt-0.5">Hematologi Rutin, SGOT/SGPT, Ureum/Kreatinin, Urine</p>
+                                </div>
+                                <span class="bg-slate-100 text-slate-600 text-[10px] font-medium px-2 py-1 rounded-lg"><i class="fas fa-clock mr-[2px]"></i>1 hari</span>
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-slate-100 flex justify-between items-center">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 line-through">Rp 650.000</span>
+                                    <div class="text-sm font-bold text-navy-900">Rp 480.000</div>
+                                </div>
+                                <button onclick="openBookingModal('Medical Check Up Essential', 480000)" class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-3.5 py-1.5 rounded-xl text-xs transition-colors shadow-sm">
+                                    Pesan Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Digital PDF Results Preview Section -->
+                <div class="px-4 mt-6 mb-6">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Hasil Lab Terbaru Anda</h3>
+                    <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-sm flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-red-50 text-red-500 p-2.5 rounded-xl">
+                                <i class="fas fa-file-pdf text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">Tes Hematologi & Glukosa</h4>
+                                <p class="text-[10px] text-slate-500">Selesai: 18 Okt 2026 • Ref: LAB-8892</p>
+                            </div>
+                        </div>
+                        <button onclick="downloadMockPDF('LAB-8892')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1">
+                            <i class="fas fa-download text-[10px]"></i> PDF
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 2. HEALTHCARE STAFF VIEW (ADMIN / ANALYST) -->
+            <!-- ========================================== -->
+            <div id="portal-staff" class="hidden">
+                
+                <!-- Staff Header -->
+                <div class="bg-slate-800 text-white p-4 shadow-sm border-b border-slate-700">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-2.5">
+                            <img src="https://images.unsplash.com/photo-1594824813566-82823d5afe4a?w=100&auto=format&fit=crop&q=80" class="w-9 h-9 rounded-full border-2 border-cyan-400 object-cover" alt="Nakes Avatar">
+                            <div>
+                                <h2 class="text-xs font-bold">dr. Siska Febriani, Sp.PK</h2>
+                                <p class="text-[10px] text-cyan-300">Analis Laboratorium (ATLM-Utama)</p>
+                            </div>
+                        </div>
+                        <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping"></span> Shift Pagi
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Metrics Overview -->
+                <div class="p-4 grid grid-cols-3 gap-2.5">
+                    <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                        <div class="text-slate-400 text-[10px] font-semibold uppercase">Sampel Masuk</div>
+                        <div class="text-lg font-bold text-navy-900 mt-0.5" id="cnt-pending">4</div>
+                    </div>
+                    <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                        <div class="text-slate-400 text-[10px] font-semibold uppercase">Proses Analisis</div>
+                        <div class="text-lg font-bold text-amber-600 mt-0.5" id="cnt-analysis">2</div>
+                    </div>
+                    <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                        <div class="text-slate-400 text-[10px] font-semibold uppercase">Nilai Kritis</div>
+                        <div class="text-lg font-bold text-red-600 mt-0.5 flex justify-center items-center gap-1">
+                            <span>1</span> <i class="fas fa-triangle-exclamation text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Queue & Verification Tabs -->
+                <div class="px-4">
+                    <div class="flex border-b border-slate-200 mb-3">
+                        <button id="tab-queue-btn" onclick="switchStaffTab('queue')" class="py-2 px-3 text-xs font-bold text-cyan-600 border-b-2 border-cyan-600">
+                            Antrean Sampel & Barcode
+                        </button>
+                        <button id="tab-verify-btn" onclick="switchStaffTab('verify')" class="py-2 px-3 text-xs font-bold text-slate-400 hover:text-slate-600">
+                            Input & Verifikasi Hasil
+                        </button>
+                    </div>
+
+                    <!-- TAB 1: SAMPLE QUEUE LIST -->
+                    <div id="staff-tab-queue" class="space-y-3">
+                        <div class="text-[11px] font-bold text-slate-500 uppercase flex justify-between items-center">
+                            <span>Antrean Pasien Hari Ini</span>
+                            <span class="text-[10px] text-slate-400">Warna Tabung: <span class="text-purple-600">EDTA</span>, <span class="text-red-500">Clot</span>, <span class="text-yellow-500">Serum</span></span>
+                        </div>
+
+                        <!-- Sample Item 1 -->
+                        <div class="bg-white rounded-2xl p-3 border border-slate-200 shadow-sm hover:border-cyan-500 transition-all">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="tube-indicator bg-purple-600" title="Tabung EDTA (Ungu)"></span>
+                                        <h4 class="font-bold text-xs text-slate-800">Ahmad Rizky (32th)</h4>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 mt-1"><i class="fas fa-barcode mr-1"></i>ID Barcode: <span class="font-mono font-bold text-slate-700">BC-2026-0911</span></p>
+                                    <span class="inline-block mt-1 bg-slate-100 text-slate-700 text-[9px] px-2 py-0.5 rounded font-medium">Tes Darah Lengkap & Glukosa</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="bg-amber-100 text-amber-700 text-[9px] font-bold px-2 py-0.5 rounded-full">Dalam Analisis</span>
+                                    <button onclick="selectPatientForEntry('Ahmad Rizky', 'BC-2026-0911')" class="block mt-2 text-[10px] bg-navy-900 text-white font-semibold px-2.5 py-1 rounded-lg hover:bg-slate-800">
+                                        Input Hasil <i class="fas fa-edit ml-0.5 text-[9px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Item 2 -->
+                        <div class="bg-white rounded-2xl p-3 border border-slate-200 shadow-sm">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="tube-indicator bg-red-600" title="Tabung Clot Activator (Merah)"></span>
+                                        <h4 class="font-bold text-xs text-slate-800">Siti Nurhaliza (28th)</h4>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 mt-1"><i class="fas fa-barcode mr-1"></i>ID Barcode: <span class="font-mono font-bold text-slate-700">BC-2026-0912</span></p>
+                                    <span class="inline-block mt-1 bg-slate-100 text-slate-700 text-[9px] px-2 py-0.5 rounded font-medium">Profil Lipid / Kolesterol</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="bg-blue-100 text-blue-700 text-[9px] font-bold px-2 py-0.5 rounded-full">Menunggu Analis</span>
+                                    <button onclick="selectPatientForEntry('Siti Nurhaliza', 'BC-2026-0912')" class="block mt-2 text-[10px] bg-slate-200 text-slate-700 font-semibold px-2.5 py-1 rounded-lg hover:bg-slate-300">
+                                        Input Hasil
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Item 3 -->
+                        <div class="bg-white rounded-2xl p-3 border border-slate-200 shadow-sm">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="tube-indicator bg-yellow-400" title="Tabung SST Gel (Kuning)"></span>
+                                        <h4 class="font-bold text-xs text-slate-800">Budi Santoso (45th)</h4>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 mt-1"><i class="fas fa-barcode mr-1"></i>ID Barcode: <span class="font-mono font-bold text-slate-700">BC-2026-0913</span></p>
+                                    <span class="inline-block mt-1 bg-slate-100 text-slate-700 text-[9px] px-2 py-0.5 rounded font-medium">Fungsi Hati & Kidney MCU</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="bg-emerald-100 text-emerald-700 text-[9px] font-bold px-2 py-0.5 rounded-full">Tervalidasi</span>
+                                    <span class="block mt-2 text-[10px] text-emerald-600 font-bold"><i class="fas fa-check-circle"></i> Selesai</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: RESULT VERIFICATION & ENTRY PANEL -->
+                    <div id="staff-tab-verify" class="hidden space-y-4">
+                        <div class="bg-slate-100 p-3 rounded-xl border border-slate-200">
+                            <div class="text-[10px] text-slate-500 font-semibold uppercase">Pasien Terpilih</div>
+                            <div class="flex justify-between items-center mt-1">
+                                <div>
+                                    <h4 class="font-bold text-xs text-slate-800" id="verify-patient-name">Ahmad Rizky</h4>
+                                    <p class="text-[10px] text-slate-500 font-mono" id="verify-patient-barcode">BC-2026-0911</p>
+                                </div>
+                                <span class="bg-purple-100 text-purple-700 text-[9px] font-bold px-2 py-1 rounded">Tabung EDTA</span>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Result Form with Auto Reference Validation -->
+                        <div class="bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm space-y-3">
+                            <h4 class="text-xs font-bold text-slate-800 border-b pb-2 flex justify-between items-center">
+                                <span>Nilai Laboratorium</span>
+                                <span class="text-[9px] font-normal text-slate-400">Deteksi Otomatis Batas Normal</span>
+                            </h4>
+
+                            <!-- Test Item 1: Hemoglobin -->
+                            <div>
+                                <div class="flex justify-between text-[11px] mb-1">
+                                    <label class="font-semibold text-slate-700">Hemoglobin (Hb)</label>
+                                    <span class="text-slate-400 text-[10px]">Rujukan: 13.0 - 17.5 g/dL</span>
+                                </div>
+                                <div class="relative">
+                                    <input type="number" id="val-hb" value="14.2" step="0.1" oninput="checkReferenceRanges()" class="w-full text-xs p-2 border rounded-xl focus:ring-2 focus:ring-cyan-500 font-semibold text-slate-800">
+                                    <span id="badge-hb" class="absolute right-2 top-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">NORMAL</span>
+                                </div>
+                            </div>
+
+                            <!-- Test Item 2: Leukosit -->
+                            <div>
+                                <div class="flex justify-between text-[11px] mb-1">
+                                    <label class="font-semibold text-slate-700">Leukosit (WBC)</label>
+                                    <span class="text-slate-400 text-[10px]">Rujukan: 4.5 - 11.0 10^3/µL</span>
+                                </div>
+                                <div class="relative">
+                                    <input type="number" id="val-wbc" value="13.5" step="0.1" oninput="checkReferenceRanges()" class="w-full text-xs p-2 border border-red-300 bg-red-50/30 rounded-xl focus:ring-2 focus:ring-red-500 font-semibold text-red-700">
+                                    <span id="badge-wbc" class="absolute right-2 top-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700 animate-pulse">TINGGI (KRITIS)</span>
+                                </div>
+                            </div>
+
+                            <!-- Test Item 3: Glukosa Puasa -->
+                            <div>
+                                <div class="flex justify-between text-[11px] mb-1">
+                                    <label class="font-semibold text-slate-700">Glukosa Darah Puasa</label>
+                                    <span class="text-slate-400 text-[10px]">Rujukan: 70 - 99 mg/dL</span>
+                                </div>
+                                <div class="relative">
+                                    <input type="number" id="val-glucose" value="95" oninput="checkReferenceRanges()" class="w-full text-xs p-2 border rounded-xl focus:ring-2 focus:ring-cyan-500 font-semibold text-slate-800">
+                                    <span id="badge-glucose" class="absolute right-2 top-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">NORMAL</span>
+                                </div>
+                            </div>
+
+                            <!-- Catatan Dokter Analyst -->
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-700 mb-1">Catatan Evaluasi Analis</label>
+                                <textarea id="analyst-notes" rows="2" class="w-full text-xs p-2 border rounded-xl text-slate-700 focus:ring-2 focus:ring-cyan-500" placeholder="Tambahkan catatan jika ada leukositosis...">Terdapat peningkatan angka leukosit (Leukositosis ringan). Disarankan evaluasi tanda infeksi klinis.</textarea>
+                            </div>
+
+                            <!-- Digital Signature & Submit Button -->
+                            <div class="pt-2">
+                                <button onclick="approveAndSignResult()" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm flex justify-center items-center gap-2">
+                                    <i class="fas fa-file-signature"></i> Verifikasi & Tanda Tangan Digital (ATLM)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- BOTTOM NAVIGATION BAR (PATIENT MODE ONLY) -->
+        <!-- ========================================== -->
+        <div id="patient-bottom-nav" class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-2 flex justify-between items-center z-40">
+            <button onclick="switchPatientTab('home')" class="flex flex-col items-center text-cyan-600">
+                <i class="fas fa-house-medical text-base"></i>
+                <span class="text-[10px] font-medium mt-0.5">Beranda</span>
+            </button>
+            <button onclick="showLiveTrackerModal()" class="flex flex-col items-center text-slate-400 hover:text-slate-600">
+                <i class="fas fa-receipt text-base"></i>
+                <span class="text-[10px] font-medium mt-0.5">Status Lab</span>
+            </button>
+            <button onclick="downloadMockPDF('LAB-8892')" class="flex flex-col items-center text-slate-400 hover:text-slate-600">
+                <i class="fas fa-file-waveform text-base"></i>
+                <span class="text-[10px] font-medium mt-0.5">Hasil PDF</span>
+            </button>
+            <button onclick="alert('Fitur Profil Pasien Aktif')" class="flex flex-col items-center text-slate-400 hover:text-slate-600">
+                <i class="fas fa-user-gear text-base"></i>
+                <span class="text-[10px] font-medium mt-0.5">Akun</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: BOOKING & RESERVATION FLOW        -->
+    <!-- ========================================== -->
+    <div id="modal-booking" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-sm text-slate-800" id="modal-package-title">Reservasi Tes</h3>
+                <button onclick="closeModal('modal-booking')" class="text-slate-400 hover:text-slate-600">
+                    <i class="fas fa-times text-base"></i>
+                </button>
+            </div>
+
+            <!-- Booking Form -->
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Metode Pengambilan Sampel</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="border rounded-xl p-2.5 flex items-center space-x-2 cursor-pointer hover:border-cyan-500">
+                            <input type="radio" name="sample_method" value="home" checked class="text-cyan-600 focus:ring-cyan-500">
+                            <div>
+                                <span class="block text-xs font-bold text-slate-800">Home Visit</span>
+                                <span class="text-[9px] text-slate-400">Petugas datang ke rumah</span>
+                            </div>
+                        </label>
+                        <label class="border rounded-xl p-2.5 flex items-center space-x-2 cursor-pointer hover:border-cyan-500">
+                            <input type="radio" name="sample_method" value="clinic" class="text-cyan-600 focus:ring-cyan-500">
+                            <div>
+                                <span class="block text-xs font-bold text-slate-800">Datang ke Lab</span>
+                                <span class="text-[9px] text-slate-400">Antrean Jalur Khusus</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Pilih Tanggal & Waktu</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="date" id="booking-date" value="2026-10-21" class="text-xs p-2 border rounded-xl focus:ring-2 focus:ring-cyan-500 text-slate-700">
+                        <select class="text-xs p-2 border rounded-xl focus:ring-2 focus:ring-cyan-500 text-slate-700">
+                            <option>08:00 - 09:00 WIB</option>
+                            <option>09:00 - 10:00 WIB</option>
+                            <option>10:00 - 11:00 WIB</option>
+                            <option>13:00 - 14:00 WIB</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Domisili Pasien</label>
+                    <textarea rows="2" class="w-full text-xs p-2 border rounded-xl text-slate-700 focus:ring-2 focus:ring-cyan-500" placeholder="Jl. Terusan Hang Lekir No. 12, Kebayoran Baru...">Jl. Terusan Hang Lekir No. 12, Kebayoran Baru, Jakarta Selatan</textarea>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center">
+                    <span class="text-xs text-slate-600 font-medium">Total Pembayaran</span>
+                    <span class="text-sm font-bold text-navy-900" id="modal-package-price">Rp 195.000</span>
+                </div>
+            </div>
+
+            <button onclick="confirmBooking()" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-xl text-xs transition-colors shadow-md">
+                Konfirmasi & Bayar
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: LIVE ORDER TRACKING STATUS        -->
+    <!-- ========================================== -->
+    <div id="modal-tracker" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <div>
+                    <h3 class="font-bold text-sm text-slate-800">Pelacakan Status Pemeriksaan</h3>
+                    <p class="text-[10px] text-slate-500">No. Registrasi: <span class="font-mono font-bold">REG-2026-9901</span></p>
+                </div>
+                <button onclick="closeModal('modal-tracker')" class="text-slate-400 hover:text-slate-600">
+                    <i class="fas fa-times text-base"></i>
+                </button>
+            </div>
+
+            <!-- Timeline Status Steps -->
+            <div class="space-y-4 my-2 px-2">
+                <!-- Step 1 -->
+                <div class="flex items-start space-x-3">
+                    <div class="flex flex-col items-center">
+                        <div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="w-0.5 h-8 bg-emerald-500"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-800">Pengambilan Sampel Berhasil</h4>
+                        <p class="text-[10px] text-slate-500">Petugas Nakes: Budi Hartono (Home Service)</p>
+                        <span class="text-[9px] text-slate-400">08:15 WIB</span>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex items-start space-x-3">
+                    <div class="flex flex-col items-center">
+                        <div class="w-6 h-6 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold animate-bounce">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div class="w-0.5 h-8 bg-slate-200"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-cyan-600">Sampel Sedang Dalam Analisis</h4>
+                        <p class="text-[10px] text-slate-500">Diuji oleh Analis Lab menggunakan Centrifuge & Analyzer</p>
+                        <span class="text-[9px] text-cyan-600 font-semibold">Proses Berlangsung...</span>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex items-start space-x-3">
+                    <div class="flex flex-col items-center">
+                        <div class="w-6 h-6 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center text-[10px] font-bold">
+                            3
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-400">Hasil & Validasi Dokter</h4>
+                        <p class="text-[10px] text-slate-400">Menunggu Tanda Tangan Digital Dokter Sp.PK</p>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="closeModal('modal-tracker')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+                Tutup Tracker
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT LOGIC & INTERACTION STATE      -->
+    <!-- ========================================== -->
+    <script>
+        // Portal Switcher Logic (Pasien vs Nakes)
+        function switchPortal(portal) {
+            const consumerPortal = document.getElementById('portal-consumer');
+            const staffPortal = document.getElementById('portal-staff');
+            const btnConsumer = document.getElementById('btn-consumer-mode');
+            const btnStaff = document.getElementById('btn-staff-mode');
+            const bottomNav = document.getElementById('patient-bottom-nav');
+
+            if (portal === 'consumer') {
+                consumerPortal.classList.remove('hidden');
+                staffPortal.classList.add('hidden');
+                bottomNav.classList.remove('hidden');
+
+                btnConsumer.className = "px-3 py-1 rounded-full font-medium transition-all duration-200 text-white bg-cyan-500 shadow-sm flex items-center gap-1";
+                btnStaff.className = "px-3 py-1 rounded-full font-medium transition-all duration-200 text-slate-400 hover:text-white flex items-center gap-1";
+            } else {
+                consumerPortal.classList.add('hidden');
+                staffPortal.classList.remove('hidden');
+                bottomNav.classList.add('hidden');
+
+                btnStaff.className = "px-3 py-1 rounded-full font-medium transition-all duration-200 text-white bg-cyan-500 shadow-sm flex items-center gap-1";
+                btnConsumer.className = "px-3 py-1 rounded-full font-medium transition-all duration-200 text-slate-400 hover:text-white flex items-center gap-1";
+            }
+        }
+
+        // Staff Tabs Switcher
+        function switchStaffTab(tab) {
+            const queueTab = document.getElementById('staff-tab-queue');
+            const verifyTab = document.getElementById('staff-tab-verify');
+            const btnQueue = document.getElementById('tab-queue-btn');
+            const btnVerify = document.getElementById('tab-verify-btn');
+
+            if (tab === 'queue') {
+                queueTab.classList.remove('hidden');
+                verifyTab.classList.add('hidden');
+                btnQueue.className = "py-2 px-3 text-xs font-bold text-cyan-600 border-b-2 border-cyan-600";
+                btnVerify.className = "py-2 px-3 text-xs font-bold text-slate-400 hover:text-slate-600";
+            } else {
+                queueTab.classList.add('hidden');
+                verifyTab.classList.remove('hidden');
+                btnVerify.className = "py-2 px-3 text-xs font-bold text-cyan-600 border-b-2 border-cyan-600";
+                btnQueue.className = "py-2 px-3 text-xs font-bold text-slate-400 hover:text-slate-600";
+            }
+        }
+
+        // Patient Selection in Staff Mode
+        function selectPatientForEntry(name, barcode) {
+            document.getElementById('verify-patient-name').innerText = name;
+            document.getElementById('verify-patient-barcode').innerText = barcode;
+            switchStaffTab('verify');
+        }
+
+        // Auto-checking Laboratory Reference Ranges
+        function checkReferenceRanges() {
+            // Hb Check (13 - 17.5)
+            const hbVal = parseFloat(document.getElementById('val-hb').value);
+            const hbBadge = document.getElementById('badge-hb');
+            if (hbVal < 13.0) {
+                hbBadge.className = "absolute right-2 top-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700";
+                hbBadge.innerText = "RENDAH";
+            } else if (hbVal > 17.5) {
+                hbBadge.className = "absolute right-2 top-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700";
+                hbBadge.innerText = "TINGGI";
+            } else {
+                hbBadge.className = "absolute right-2 top-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700";
+                hbBadge.innerText = "NORMAL";
+            }
+
+            // WBC Check (4.5 - 11.0)
+            const wbcVal = parseFloat(document.getElementById('val-wbc').value);
+            const wbcBadge = document.getElementById('badge-wbc');
+            if (wbcVal > 11.0) {
+                wbcBadge.className = "absolute right-2 top-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700 animate-pulse";
+                wbcBadge.innerText = "TINGGI (KRITIS)";
+            } else if (wbcVal < 4.5) {
+                wbcBadge.className = "absolute right-2 top-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700";
+                wbcBadge.innerText = "RENDAH";
+            } else {
+                wbcBadge.className = "absolute right-2 top-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700";
+                wbcBadge.innerText = "NORMAL";
+            }
+        }
+
+        // Booking Modal Logic
+        function openBookingModal(packageName, price) {
+            document.getElementById('modal-package-title').innerText = "Reservasi: " + packageName;
+            document.getElementById('modal-package-price').innerText = "Rp " + price.toLocaleString('id-ID');
+            document.getElementById('modal-booking').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function confirmBooking() {
+            closeModal('modal-booking');
+            alert('✅ Reservasi Tes Laboratorium Berhasil! Petugas kami akan menghubungi Anda melalui Whatsapp.');
+        }
+
+        function showLiveTrackerModal() {
+            document.getElementById('modal-tracker').classList.remove('hidden');
+        }
+
+        // Search and Filter Functionality
+        function filterPackages() {
+            const query = document.getElementById('patient-search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.package-card');
+
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name');
+                if (name.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function filterCategory(cat) {
+            const cards = document.querySelectorAll('.package-card');
+            cards.forEach(card => {
+                if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function resetFilters() {
+            document.getElementById('patient-search-input').value = '';
+            filterCategory('all');
+        }
+
+        // Mock PDF Downloader
+        function downloadMockPDF(refNo) {
+            const pdfContent = `
+===================================================
+                LABMOBILE INDONESIA                
+            Laporan Hasil Pemeriksaan Laboratorium  
+===================================================
+No. Referensi : ${refNo}
+Nama Pasien   : Ahmad Rizky (L, 32 Tahun)
+Tanggal Tes   : 18 Oktober 2026
+Dokter Penanggung Jawab : dr. Siska Febriani, Sp.PK
+
+---------------------------------------------------
+PEMERIKSAAN           HASIL        SATUAN   RUJUKAN
+---------------------------------------------------
+Hemoglobin (Hb)       14.2         g/dL     13.0 - 17.5 (Normal)
+Leukosit (WBC)        8.5          10^3/uL  4.5 - 11.0  (Normal)
+Trombosit             250          10^3/uL  150 - 450   (Normal)
+Glukosa Darah Puasa   92           mg/dL    70 - 99     (Normal)
+---------------------------------------------------
+Catatan Tambahan: Semua parameter berada dalam kondisi normal.
+
+Tanda Tangan Digital Verifikasi:
+[VALIDATED BY LABMOBILE ATLM DIGITAL CERTIFICATE]
+===================================================
+            `;
+
+            const blob = new Blob([pdfContent], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Hasil_Lab_${refNo}.txt`;
+            link.click();
+        }
+
+        // Staff Approval
+        function approveAndSignResult() {
+            alert('🎉 Hasil Laboratorium berhasil diverifikasi & ditandatangani secara digital! Hasil otomatis terkirim ke aplikasi Pasien.');
+            switchStaffTab('queue');
+        }
+    </script>
+</body>
+</html>
