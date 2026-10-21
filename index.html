@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -11,39 +11,46 @@
 tailwind.config={theme:{extend:{colors:{pk:{50:'#FFF5F8',100:'#FFE8F0',200:'#FDD0E1',300:'#F7AAC8',400:'#F086B0',500:'#E56A9C',600:'#D04F85',700:'#A63B69',900:'#6B2848'}},fontFamily:{sans:['Inter','system-ui','sans-serif']}}}}
 </script>
 <style>
-:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);box-sizing:border-box}
+:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
 html{scroll-padding-top:5rem}
 body{font-family:'Inter',system-ui,sans-serif;background:#FFF5F8;-webkit-tap-highlight-color:transparent;padding-bottom:env(safe-area-inset-bottom,0px)}
 .tube{width:12px;height:12px;border-radius:50%;display:inline-block}
 .blob{background:radial-gradient(circle at 30% 20%,#FDD0E1,transparent 60%),radial-gradient(circle at 80% 70%,#F7AAC8,transparent 55%)}
+.nav-on{color:#D04F85;font-weight:700}
+details>summary{list-style:none;cursor:pointer}details>summary::-webkit-details-marker{display:none}
+details[open] .chev{transform:rotate(180deg)}
 </style>
 </head>
 <body class="text-slate-800 pb-16 md:pb-0">
 
-<!-- NAVBAR -->
 <header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-pk-100">
  <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
-  <a href="#" class="flex items-center gap-2"><span class="w-9 h-9 rounded-xl bg-pk-500 text-white flex items-center justify-center"><i class="fas fa-microscope"></i></span><span class="font-extrabold text-lg text-pk-900">LabMobile<span class="text-pk-500">.id</span></span></a>
+  <a href="#" onclick="go('home');return false" class="flex items-center gap-2"><span class="w-9 h-9 rounded-xl bg-pk-500 text-white flex items-center justify-center"><i class="fas fa-microscope"></i></span><span class="font-extrabold text-lg text-pk-900">LabMobile<span class="text-pk-500">.id</span></span></a>
   <nav id="nav-links" class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
-   <a href="#layanan" class="hover:text-pk-600">Layanan</a><a href="#paket" class="hover:text-pk-600">Paket</a><a href="#hasil" class="hover:text-pk-600">Hasil Lab</a><a href="#kontak" class="hover:text-pk-600">Kontak</a>
+   <button data-p="home" onclick="go('home')" class="hover:text-pk-600">Beranda</button>
+   <button onclick="go('home','layanan')" class="hover:text-pk-600">Layanan</button>
+   <button onclick="go('home','paket')" class="hover:text-pk-600">Paket</button>
+   <button data-p="hasil" onclick="go('hasil')" class="hover:text-pk-600">Hasil Lab</button>
+   <button data-p="kontak" onclick="go('kontak')" class="hover:text-pk-600">Kontak</button>
   </nav>
   <div class="flex items-center gap-2">
    <div class="bg-pk-100 p-1 rounded-full flex text-xs font-semibold">
-    <button id="btn-consumer-mode" onclick="switchPortal('consumer')" class="px-3.5 py-1.5 rounded-full"><i class="fas fa-user mr-1"></i>Pasien</button>
-    <button id="btn-staff-mode" onclick="switchPortal('staff')" class="px-3.5 py-1.5 rounded-full"><i class="fas fa-user-md mr-1"></i>Nakes</button>
+    <button id="btn-consumer-mode" onclick="go('home')" class="px-3.5 py-1.5 rounded-full"><i class="fas fa-user mr-1"></i>Pasien</button>
+    <button id="btn-staff-mode" onclick="go('staff')" class="px-3.5 py-1.5 rounded-full"><i class="fas fa-user-md mr-1"></i>Nakes</button>
    </div>
    <button onclick="openModal('modal-tracker')" class="hidden sm:flex relative w-9 h-9 rounded-full bg-pk-100 text-pk-600 items-center justify-center"><i class="fas fa-bell text-sm"></i><span class="absolute top-1.5 right-2 w-2 h-2 bg-pk-500 rounded-full"></span></button>
+   <a href="https://wa.me/6285340477177" target="_blank" rel="noopener" class="hidden lg:flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold px-3 py-2 rounded-full"><i class="fab fa-whatsapp text-sm"></i>0853-4047-7177</a>
   </div>
  </div>
 </header>
 
-<!-- ============ PORTAL PASIEN ============ -->
-<main id="portal-consumer">
+<!-- ===== BERANDA ===== -->
+<main id="page-home" class="page">
  <section class="blob">
   <div class="max-w-6xl mx-auto px-4 py-10 md:py-20 grid md:grid-cols-2 gap-10 items-center">
    <div>
-    <span class="inline-flex items-center gap-2 bg-white text-pk-600 text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm"><i class="fas fa-location-dot"></i> Jakarta Selatan, DKI Jakarta</span>
-    <h1 class="mt-4 text-3xl md:text-5xl font-extrabold text-pk-900 leading-tight">Halo, Diva Keren 👋<br><span class="text-pk-500">Cek lab jadi lebih mudah.</span></h1>
+    <span class="inline-flex items-center gap-2 bg-white text-pk-600 text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm"><i class="fas fa-location-dot"></i> Makassar, Sulawesi Selatan</span>
+    <h1 class="mt-4 text-3xl md:text-5xl font-extrabold text-pk-900 leading-tight">Halo, Diva Keren👋<br><span class="text-pk-500">Cek lab jadi lebih mudah.</span></h1>
     <p class="mt-3 text-slate-600 md:text-lg">Reservasi pemeriksaan laboratorium, pantau status sampel, dan unduh hasil resmi langsung dari rumah.</p>
     <div class="mt-6 relative max-w-lg">
      <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-pk-300"></i>
@@ -53,40 +60,89 @@ body{font-family:'Inter',system-ui,sans-serif;background:#FFF5F8;-webkit-tap-hig
      <span><b class="text-pk-700 text-xl block">120+</b>Jenis Tes</span><span><b class="text-pk-700 text-xl block">3 Jam</b>Hasil Tercepat</span><span><b class="text-pk-700 text-xl block">24/7</b>Home Service</span>
     </div>
    </div>
-   <!-- Kartu tracker -->
    <div class="bg-white rounded-3xl shadow-xl p-5 md:p-6 border border-pk-100">
     <div class="flex items-center justify-between mb-4"><span class="bg-pk-100 text-pk-600 text-[10px] uppercase font-bold px-2.5 py-1 rounded-full tracking-wider">Status Pesanan Aktif</span><span class="text-xs text-slate-400 font-mono">REG-2026-9901</span></div>
     <h3 class="font-bold text-lg">Tes Darah Lengkap & Gula</h3>
     <div class="mt-5 space-y-4 text-sm">
-     <div class="flex gap-3"><span class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs"><i class="fas fa-check"></i></span><div><b>Pengambilan Sampel Berhasil</b><p class="text-xs text-slate-500">Budi Hartono (Home Service) • 08:15 WIB</p></div></div>
+     <div class="flex gap-3"><span class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs"><i class="fas fa-check"></i></span><div><b>Pengambilan Sampel Berhasil</b><p class="text-xs text-slate-500">Budi Hartono (Home Service) • 08:15 WITA</p></div></div>
      <div class="flex gap-3"><span class="w-7 h-7 rounded-full bg-pk-500 text-white flex items-center justify-center text-xs animate-pulse"><i class="fas fa-flask"></i></span><div><b class="text-pk-600">Sampel Sedang Dianalisis</b><p class="text-xs text-slate-500">Diuji Analis Lab dengan Centrifuge & Analyzer</p></div></div>
      <div class="flex gap-3"><span class="w-7 h-7 rounded-full bg-pk-100 text-pk-300 flex items-center justify-center text-xs font-bold">3</span><div><b class="text-slate-400">Hasil & Validasi Dokter</b><p class="text-xs text-slate-400">Menunggu tanda tangan digital dokter Sp.PK</p></div></div>
     </div>
    </div>
   </div>
  </section>
-
  <section id="layanan" class="max-w-6xl mx-auto px-4 py-12">
   <h2 class="text-2xl font-extrabold text-pk-900">Layanan Laboratorium</h2><p class="text-sm text-slate-500 mb-6">Pilih kategori untuk memfilter paket pemeriksaan.</p>
   <div id="cats" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
  </section>
-
  <section id="paket" class="max-w-6xl mx-auto px-4 pb-12">
   <div class="flex items-end justify-between mb-6"><div><h2 class="text-2xl font-extrabold text-pk-900">Paket Pemeriksaan Populer</h2><p class="text-sm text-slate-500">Harga promo, hasil resmi dari dokter Sp.PK.</p></div><button onclick="resetFilters()" class="text-sm text-pk-600 font-semibold hover:underline">Lihat Semua</button></div>
   <div id="packages-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
  </section>
-
- <section id="hasil" class="max-w-6xl mx-auto px-4 pb-14">
-  <h2 class="text-2xl font-extrabold text-pk-900 mb-4">Hasil Lab Terbaru Anda</h2>
+ <section class="max-w-6xl mx-auto px-4 pb-14">
   <div class="bg-white rounded-2xl p-5 border border-pk-100 shadow-sm flex flex-wrap items-center justify-between gap-4">
-   <div class="flex items-center gap-4"><div class="bg-pk-100 text-pk-600 w-12 h-12 rounded-xl flex items-center justify-center text-xl"><i class="fas fa-file-pdf"></i></div><div><h4 class="font-bold">Tes Hematologi & Glukosa</h4><p class="text-xs text-slate-500">Selesai: 18 Okt 2026 • Ref: LAB-8892</p></div></div>
-   <button onclick="downloadMockPDF('LAB-8892')" class="bg-pk-500 hover:bg-pk-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl"><i class="fas fa-download mr-1.5"></i>Unduh Hasil</button>
+   <div class="flex items-center gap-4"><div class="bg-pk-100 text-pk-600 w-12 h-12 rounded-xl flex items-center justify-center text-xl"><i class="fas fa-file-pdf"></i></div><div><h4 class="font-bold">Hasil terbaru: Tes Hematologi & Glukosa</h4><p class="text-xs text-slate-500">Selesai: 18 Okt 2026 • Ref: LAB-8892</p></div></div>
+   <button onclick="go('hasil','LAB-8892')" class="bg-pk-500 hover:bg-pk-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl">Lihat Hasil <i class="fas fa-arrow-right ml-1"></i></button>
   </div>
  </section>
 </main>
 
-<!-- ============ PORTAL NAKES ============ -->
-<main id="portal-staff" class="hidden max-w-6xl mx-auto px-4 py-8">
+<!-- ===== HASIL LAB ===== -->
+<main id="page-hasil" class="page hidden max-w-6xl mx-auto px-4 py-8">
+ <h1 class="text-2xl md:text-3xl font-extrabold text-pk-900">Hasil Laboratorium</h1>
+ <p class="text-sm text-slate-500 mb-5">Riwayat pemeriksaan atas nama <b>Diva Keren</b>. Hasil resmi divalidasi dokter Sp.PK.</p>
+ <div class="bg-white rounded-2xl p-4 border border-pk-100 shadow-sm flex flex-wrap items-center gap-3 mb-5">
+  <span class="w-9 h-9 rounded-full bg-pk-500 text-white flex items-center justify-center animate-pulse"><i class="fas fa-flask text-sm"></i></span>
+  <div class="flex-1 min-w-[200px]"><b class="text-sm">Tes Darah Lengkap & Gula • REG-2026-9901</b><p class="text-xs text-slate-500">Sampel sedang dianalisis, hasil menyusul setelah validasi dokter.</p></div>
+  <button onclick="openModal('modal-tracker')" class="text-xs font-semibold text-pk-600 bg-pk-100 px-3 py-1.5 rounded-lg">Lacak Status</button>
+ </div>
+ <div class="grid lg:grid-cols-5 gap-5">
+  <section class="lg:col-span-2">
+   <div class="flex gap-2 mb-3 text-xs font-semibold" id="res-filter"></div>
+   <div id="res-list" class="space-y-3"></div>
+  </section>
+  <section id="res-detail" class="lg:col-span-3 bg-white rounded-2xl p-5 border border-pk-100 shadow-sm h-fit"></section>
+ </div>
+</main>
+
+<!-- ===== KONTAK ===== -->
+<main id="page-kontak" class="page hidden max-w-6xl mx-auto px-4 py-8">
+ <h1 class="text-2xl md:text-3xl font-extrabold text-pk-900">Hubungi Kami</h1>
+ <p class="text-sm text-slate-500 mb-6">Tim LabMobile siap membantu reservasi, home service, dan pertanyaan hasil lab.</p>
+ <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+  <a href="tel:+6285340477177" class="bg-white p-4 rounded-2xl border border-pk-100 shadow-sm hover:shadow-md transition"><span class="w-10 h-10 rounded-xl bg-pk-100 text-pk-600 flex items-center justify-center mb-3"><i class="fas fa-phone"></i></span><b class="text-sm block">Telepon</b><span class="text-xs text-slate-500">+62 853-4047-7177</span></a>
+  <a href="https://wa.me/6285340477177" class="bg-white p-4 rounded-2xl border border-pk-100 shadow-sm hover:shadow-md transition"><span class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3"><i class="fab fa-whatsapp text-lg"></i></span><b class="text-sm block">WhatsApp</b><span class="text-xs text-slate-500">Konfirmasi reservasi</span></a>
+  <a href="mailto:divasharfinaaa@gmail.com" class="bg-white p-4 rounded-2xl border border-pk-100 shadow-sm hover:shadow-md transition"><span class="w-10 h-10 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center mb-3"><i class="fas fa-envelope"></i></span><b class="text-sm block">Email</b><span class="text-xs text-slate-500 break-all">divasharfinaaa@gmail.com</span></a>
+  <div class="bg-white p-4 rounded-2xl border border-pk-100 shadow-sm"><span class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3"><i class="fas fa-house-medical"></i></span><b class="text-sm block">Home Service</b><span class="text-xs text-slate-500">Aktif 24 jam</span></div>
+ </div>
+ <div class="grid lg:grid-cols-5 gap-5 mt-5">
+  <section class="lg:col-span-3 bg-white rounded-2xl p-5 border border-pk-100 shadow-sm space-y-4">
+   <h3 class="font-bold text-pk-900">Kirim Pesan</h3>
+   <div class="grid sm:grid-cols-2 gap-3">
+    <input id="c-nama" value="Diva Keren" placeholder="Nama" class="text-sm p-2.5 border border-pk-200 rounded-xl outline-none focus:ring-2 focus:ring-pk-300">
+    <select id="c-topik" class="text-sm p-2.5 border border-pk-200 rounded-xl outline-none"><option>Reservasi / Home Service</option><option>Pertanyaan Hasil Lab (LAB-8892)</option><option>Status Sampel (REG-2026-9901)</option><option>Pembayaran</option><option>Lainnya</option></select>
+   </div>
+   <textarea id="c-pesan" rows="4" placeholder="Tulis pesan Anda..." class="w-full text-sm p-3 border border-pk-200 rounded-xl outline-none focus:ring-2 focus:ring-pk-300"></textarea>
+   <p id="c-info" class="hidden text-sm text-emerald-700 bg-emerald-50 rounded-xl p-3"></p>
+   <button onclick="sendContact()" class="w-full bg-pk-500 hover:bg-pk-600 text-white font-bold py-3 rounded-xl text-sm"><i class="fas fa-paper-plane mr-2"></i>Kirim Pesan</button>
+  </section>
+  <aside class="lg:col-span-2 space-y-5">
+   <div class="bg-white rounded-2xl p-5 border border-pk-100 shadow-sm text-sm">
+    <h3 class="font-bold text-pk-900 mb-3">Lokasi & Jam Layanan</h3>
+    <p class="flex gap-3"><i class="fas fa-location-dot text-pk-500 mt-1"></i><span>Makassar, Sulawesi Selatan</span></p>
+    <p class="flex gap-3 mt-2"><i class="fas fa-clock text-pk-500 mt-1"></i><span>Senin–Minggu: 06.00–22.00 WITA<br>Home Service: 24 jam</span></p>
+    <a href="https://www.google.com/maps/search/?api=1&query=Makassar+Sulawesi+Selatan" target="_blank" rel="noopener" class="mt-4 flex items-center justify-center gap-2 bg-pk-100 text-pk-700 font-semibold text-xs py-2.5 rounded-xl"><i class="fas fa-map"></i>Buka di Google Maps</a>
+   </div>
+   <div class="bg-white rounded-2xl p-5 border border-pk-100 shadow-sm">
+    <h3 class="font-bold text-pk-900 mb-2">Pertanyaan Umum</h3>
+    <div id="faq" class="divide-y divide-pk-100 text-sm"></div>
+   </div>
+  </aside>
+ </div>
+</main>
+
+<!-- ===== NAKES ===== -->
+<main id="page-staff" class="page hidden max-w-6xl mx-auto px-4 py-8">
  <div class="bg-white rounded-2xl p-4 border border-pk-100 shadow-sm flex flex-wrap items-center justify-between gap-3">
   <div class="flex items-center gap-3"><div class="w-11 h-11 rounded-full bg-pk-500 text-white flex items-center justify-center"><i class="fas fa-user-doctor"></i></div><div><h2 class="font-bold text-pk-900">dr. Siska Febriani, Sp.PK</h2><p class="text-xs text-pk-600">Analis Laboratorium (ATLM-Utama)</p></div></div>
   <span class="bg-emerald-100 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>Shift Pagi</span>
@@ -107,117 +163,116 @@ body{font-family:'Inter',system-ui,sans-serif;background:#FFF5F8;-webkit-tap-hig
    <h4 class="font-bold border-b border-pk-100 pb-2 flex justify-between text-sm"><span>Nilai Laboratorium</span><span class="text-[10px] font-normal text-slate-400">Deteksi Otomatis Batas Normal</span></h4>
    <div id="lab-fields" class="grid sm:grid-cols-2 gap-4"></div>
    <div><label class="block text-xs font-semibold mb-1">Catatan Evaluasi Analis</label><textarea rows="3" class="w-full text-sm p-3 border border-pk-200 rounded-xl outline-none focus:ring-2 focus:ring-pk-300">Terdapat peningkatan angka leukosit (Leukositosis ringan). Disarankan evaluasi tanda infeksi klinis.</textarea></div>
-   <button onclick="approveAndSignResult()" class="w-full bg-pk-500 hover:bg-pk-600 text-white font-bold py-3 rounded-xl text-sm"><i class="fas fa-file-signature mr-2"></i>Verifikasi & Tanda Tangan Digital (ATLM)</button>
+   <button onclick="alert('🎉 Hasil berhasil diverifikasi & ditandatangani secara digital! Hasil otomatis terkirim ke aplikasi Pasien.')" class="w-full bg-pk-500 hover:bg-pk-600 text-white font-bold py-3 rounded-xl text-sm"><i class="fas fa-file-signature mr-2"></i>Verifikasi & Tanda Tangan Digital (ATLM)</button>
   </section>
  </div>
 </main>
 
-<footer id="kontak" class="bg-pk-900 text-pk-100 mt-8">
+<footer class="bg-pk-900 text-pk-100 mt-8">
  <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm">
   <div><b class="text-white text-lg">LabMobile<span class="text-pk-300">.id</span></b><p class="mt-2 text-pk-200">Sistem informasi laboratorium medis yang cepat, akurat, dan terpercaya.</p></div>
-  <div><b class="text-white">Kontak</b><p class="mt-2"><i class="fas fa-phone w-5"></i>(021) 555-0123<br><i class="fas fa-envelope w-5"></i>halo@labmobile.id<br><i class="fas fa-location-dot w-5"></i>Kebayoran Baru, Jakarta Selatan</p></div>
-  <div><b class="text-white">Jam Layanan</b><p class="mt-2">Senin–Minggu: 06.00–22.00 WIB<br>Home Service: 24 jam</p></div>
+  <div><b class="text-white">Kontak</b><p class="mt-2"><i class="fas fa-phone w-5"></i>+62 853-4047-7177<br><i class="fab fa-whatsapp w-5"></i>WhatsApp: 0853-4047-7177<br><i class="fas fa-envelope w-5"></i>divasharfinaaa@gmail.com<br><i class="fas fa-location-dot w-5"></i>Makassar, Sulawesi Selatan</p></div>
+  <div><b class="text-white">Jam Layanan</b><p class="mt-2">Senin–Minggu: 06.00–22.00 WITA<br>Home Service: 24 jam</p><button onclick="go('kontak')" class="mt-2 text-pk-300 underline text-xs">Halaman Kontak</button></div>
  </div>
  <p class="text-center text-xs text-pk-300 border-t border-white/10 py-4">© 2026 LabMobile Indonesia</p>
 </footer>
 
-<!-- Bottom nav khusus HP -->
-<nav id="patient-bottom-nav" class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-pk-100 px-6 py-2 flex justify-between z-40" style="padding-bottom:max(.5rem,env(safe-area-inset-bottom,0px))">
- <a href="#" class="flex flex-col items-center text-pk-600"><i class="fas fa-house-medical"></i><span class="text-[10px] mt-0.5">Beranda</span></a>
+<nav id="bottom-nav" class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-pk-100 px-6 pt-2 flex justify-between z-40" style="padding-bottom:max(.5rem,env(safe-area-inset-bottom,0px))">
+ <button data-p="home" onclick="go('home')" class="flex flex-col items-center"><i class="fas fa-house-medical"></i><span class="text-[10px] mt-0.5">Beranda</span></button>
  <button onclick="openModal('modal-tracker')" class="flex flex-col items-center text-slate-400"><i class="fas fa-receipt"></i><span class="text-[10px] mt-0.5">Status Lab</span></button>
- <a href="#hasil" class="flex flex-col items-center text-slate-400"><i class="fas fa-file-waveform"></i><span class="text-[10px] mt-0.5">Hasil PDF</span></a>
- <a href="#kontak" class="flex flex-col items-center text-slate-400"><i class="fas fa-user-gear"></i><span class="text-[10px] mt-0.5">Kontak</span></a>
+ <button data-p="hasil" onclick="go('hasil')" class="flex flex-col items-center"><i class="fas fa-file-waveform"></i><span class="text-[10px] mt-0.5">Hasil Lab</span></button>
+ <button data-p="kontak" onclick="go('kontak')" class="flex flex-col items-center"><i class="fas fa-headset"></i><span class="text-[10px] mt-0.5">Kontak</span></button>
 </nav>
 
-<!-- Modal booking -->
 <div id="modal-booking" class="fixed inset-0 z-50 hidden items-end md:items-center justify-center bg-pk-900/40 backdrop-blur-sm p-0 md:p-4">
  <div class="bg-white w-full max-w-lg rounded-t-3xl md:rounded-3xl p-6 shadow-2xl space-y-4 max-h-[92dvh] overflow-y-auto">
   <div class="flex justify-between items-center border-b border-pk-100 pb-3"><h3 class="font-bold" id="modal-package-title">Reservasi Tes</h3><button onclick="closeModal('modal-booking')" class="text-slate-400"><i class="fas fa-times"></i></button></div>
   <div><label class="block text-xs font-semibold mb-1">Metode Pengambilan Sampel</label><div class="grid grid-cols-2 gap-2">
    <label class="border border-pk-200 rounded-xl p-3 flex gap-2 cursor-pointer has-[:checked]:bg-pk-50 has-[:checked]:border-pk-500"><input type="radio" name="sm" checked class="accent-pk-500"><div><b class="block text-xs">Home Visit</b><span class="text-[10px] text-slate-400">Petugas datang ke rumah</span></div></label>
    <label class="border border-pk-200 rounded-xl p-3 flex gap-2 cursor-pointer has-[:checked]:bg-pk-50 has-[:checked]:border-pk-500"><input type="radio" name="sm" class="accent-pk-500"><div><b class="block text-xs">Datang ke Lab</b><span class="text-[10px] text-slate-400">Antrean Jalur Khusus</span></div></label></div></div>
-  <div><label class="block text-xs font-semibold mb-1">Tanggal & Waktu</label><div class="grid grid-cols-2 gap-2"><input type="date" value="2026-10-21" class="text-sm p-2.5 border border-pk-200 rounded-xl outline-none"><select class="text-sm p-2.5 border border-pk-200 rounded-xl outline-none"><option>08:00 - 09:00 WIB</option><option>09:00 - 10:00 WIB</option><option>10:00 - 11:00 WIB</option><option>13:00 - 14:00 WIB</option></select></div></div>
-  <div><label class="block text-xs font-semibold mb-1">Alamat Domisili Pasien</label><textarea rows="2" class="w-full text-sm p-2.5 border border-pk-200 rounded-xl outline-none">Jl. Terusan Hang Lekir No. 12, Kebayoran Baru, Jakarta Selatan</textarea></div>
+  <div><label class="block text-xs font-semibold mb-1">Tanggal & Waktu</label><div class="grid grid-cols-2 gap-2"><input type="date" value="2026-10-21" class="text-sm p-2.5 border border-pk-200 rounded-xl outline-none"><select class="text-sm p-2.5 border border-pk-200 rounded-xl outline-none"><option>08:00 - 09:00 WITA</option><option>09:00 - 10:00 WITA</option><option>10:00 - 11:00 WITA</option><option>13:00 - 14:00 WITA</option></select></div></div>
+  <div><label class="block text-xs font-semibold mb-1">Alamat Domisili Pasien</label><textarea rows="2" class="w-full text-sm p-2.5 border border-pk-200 rounded-xl outline-none" placeholder="Nama jalan, nomor rumah, kelurahan, Makassar"></textarea></div>
   <div class="bg-pk-50 p-3 rounded-xl flex justify-between items-center"><span class="text-sm text-slate-600">Total Pembayaran</span><b class="text-pk-700 text-lg" id="modal-package-price">Rp 195.000</b></div>
-  <button onclick="confirmBooking()" class="w-full bg-pk-500 hover:bg-pk-600 text-white font-bold py-3 rounded-xl text-sm">Konfirmasi & Bayar</button>
+  <button onclick="closeModal('modal-booking');alert('✅ Reservasi berhasil! Petugas kami akan menghubungi Anda melalui WhatsApp.')" class="w-full bg-pk-500 hover:bg-pk-600 text-white font-bold py-3 rounded-xl text-sm">Konfirmasi & Bayar</button>
  </div>
 </div>
 
-<!-- Modal tracker -->
 <div id="modal-tracker" class="fixed inset-0 z-50 hidden items-end md:items-center justify-center bg-pk-900/40 backdrop-blur-sm p-0 md:p-4">
  <div class="bg-white w-full max-w-md rounded-t-3xl md:rounded-3xl p-6 shadow-2xl space-y-4">
   <div class="flex justify-between border-b border-pk-100 pb-3"><div><h3 class="font-bold">Pelacakan Status Pemeriksaan</h3><p class="text-xs text-slate-500">No. Registrasi: <b class="font-mono">REG-2026-9901</b></p></div><button onclick="closeModal('modal-tracker')" class="text-slate-400"><i class="fas fa-times"></i></button></div>
-  <ol class="space-y-3 text-sm"><li class="flex gap-3"><i class="fas fa-circle-check text-emerald-500 mt-0.5"></i><div><b>Pengambilan Sampel Berhasil</b><p class="text-xs text-slate-500">08:15 WIB</p></div></li><li class="flex gap-3"><i class="fas fa-flask text-pk-500 mt-0.5 animate-bounce"></i><div><b class="text-pk-600">Sampel Sedang Dianalisis</b><p class="text-xs text-slate-500">Proses berlangsung...</p></div></li><li class="flex gap-3"><i class="far fa-circle text-pk-300 mt-0.5"></i><div><b class="text-slate-400">Hasil & Validasi Dokter</b></div></li></ol>
+  <ol class="space-y-3 text-sm"><li class="flex gap-3"><i class="fas fa-circle-check text-emerald-500 mt-0.5"></i><div><b>Pengambilan Sampel Berhasil</b><p class="text-xs text-slate-500">08:15 WITA</p></div></li><li class="flex gap-3"><i class="fas fa-flask text-pk-500 mt-0.5 animate-bounce"></i><div><b class="text-pk-600">Sampel Sedang Dianalisis</b><p class="text-xs text-slate-500">Proses berlangsung...</p></div></li><li class="flex gap-3"><i class="far fa-circle text-pk-300 mt-0.5"></i><div><b class="text-slate-400">Hasil & Validasi Dokter</b></div></li></ol>
   <button onclick="closeModal('modal-tracker')" class="w-full bg-pk-100 hover:bg-pk-200 text-pk-700 font-bold py-2.5 rounded-xl text-sm">Tutup</button>
  </div>
 </div>
 
 <script>
+const $=id=>document.getElementById(id), idr=n=>'Rp '+n.toLocaleString('id-ID');
 const CATS=[['Hematologi','Darah Lengkap','fa-droplet','bg-pk-100 text-pk-600'],['Screening','Paket MCU','fa-heart-pulse','bg-rose-100 text-rose-500'],['Home','Home Service','fa-house-medical','bg-emerald-50 text-emerald-600'],['Consult','Konsul Nakes','fa-user-doctor','bg-purple-50 text-purple-500']];
 const PKGS=[
-{n:'Paket Complete Blood Count',book:'Paket Profil Lipid Lengkap',tag:'Bebas Puasa Opsional',tc:'bg-amber-50 text-amber-600 border-amber-100',d:'Hemoglobin, Hematokrit, MCV, MCH, MCHC, Leukosit, Eritrosit, Trombosit',t:'3 jam',o:280000,p:195000,cat:'Hematologi',k:'paket kolesterol profil lipid jantung darah lengkap'},
+{n:'Paket Complete Blood Count',tag:'Bebas Puasa Opsional',tc:'bg-amber-50 text-amber-600 border-amber-100',d:'Hemoglobin, Hematokrit, MCV, MCH, MCHC, Leukosit, Eritrosit, Trombosit',t:'3 jam',o:280000,p:195000,cat:'Hematologi',k:'paket kolesterol profil lipid jantung darah lengkap'},
 {n:'Paket Skrining Diabetes & HbA1c',tag:'Rekomendasi Dokter',tc:'bg-pk-50 text-pk-600 border-pk-200',d:'Glukosa Puasa, Glukosa 2 Jam PP, HbA1c',t:'2 jam',o:350000,p:249000,cat:'Screening',k:'paket diabetes gula darah hba1c'},
 {n:'Medical Check Up Essential',tag:'Home Service Gratis',tc:'bg-purple-50 text-purple-600 border-purple-100',d:'Hematologi Rutin, SGOT/SGPT, Ureum/Kreatinin, Urine',t:'1 hari',o:650000,p:480000,cat:'Screening',k:'mcu lengkap hematologi ginjal hati urine'}];
-const Q=[['bg-purple-600','Ahmad Rizky (32th)','Ahmad Rizky','BC-2026-0911','Tes Darah Lengkap & Glukosa','bg-amber-100 text-amber-700','Dalam Analisis',1],
-['bg-red-600','Siti Nurhaliza (28th)','Siti Nurhaliza','BC-2026-0912','Profil Lipid / Kolesterol','bg-blue-100 text-blue-700','Menunggu Analis',0],
-['bg-yellow-400','Budi Santoso (45th)','Budi Santoso','BC-2026-0913','Fungsi Hati & Kidney MCU','bg-emerald-100 text-emerald-700','Tervalidasi',-1]];
+// Hasil lab pasien: [nama, nilai, satuan, min, max]
+const RES=[
+{ref:'LAB-8892',title:'Tes Hematologi & Glukosa',date:'18 Okt 2026',kind:'Hematologi',note:'Seluruh parameter dalam batas normal. Pertahankan pola hidup sehat.',items:[['Hemoglobin (Hb)',14.2,'g/dL',12,15.5],['Leukosit (WBC)',8.5,'10³/µL',4.5,11],['Trombosit',250,'10³/µL',150,450],['Glukosa Darah Puasa',92,'mg/dL',70,99]]},
+{ref:'LAB-8310',title:'Skrining Diabetes & HbA1c',date:'02 Sep 2026',kind:'Screening',note:'Glukosa 2 jam PP sedikit di atas rujukan. Disarankan kontrol diet dan pemeriksaan ulang 3 bulan.',items:[['Glukosa Puasa',97,'mg/dL',70,99],['Glukosa 2 Jam PP',152,'mg/dL',0,140],['HbA1c',5.6,'%',0,5.7]]},
+{ref:'LAB-7745',title:'Medical Check Up Essential',date:'14 Jun 2026',kind:'Screening',note:'Fungsi hati dan ginjal normal.',items:[['SGOT',24,'U/L',0,35],['SGPT',28,'U/L',0,45],['Ureum',28,'mg/dL',15,45],['Kreatinin',0.8,'mg/dL',0.6,1.1]]}];
+const flag=i=>i[1]<i[3]?['RENDAH','bg-amber-100 text-amber-700']:i[1]>i[4]?['TINGGI','bg-red-100 text-red-700']:['NORMAL','bg-emerald-100 text-emerald-700'];
+const FAQ=[['Berapa lama hasil lab keluar?','Mulai 2–3 jam untuk hematologi dan glukosa; MCU lengkap sekitar 1 hari. Status bisa dipantau lewat tombol Status Lab.'],['Bagaimana jika hasil ada yang di luar rujukan?','Hasil ditandai otomatis dan disertai catatan analis. Hubungi kami untuk konsultasi dengan dokter Sp.PK.'],['Apakah home service dikenakan biaya?','Paket Medical Check Up Essential gratis home service. Paket lain mengikuti biaya yang tampil saat reservasi.'],['Bagaimana mengubah jadwal reservasi?','Hubungi WhatsApp atau telepon kami minimal 2 jam sebelum jadwal pengambilan sampel.']];
+const Q=[['bg-purple-600','Ahmad Rizky (32th)','Ahmad Rizky','BC-2026-0911','Tes Darah Lengkap & Glukosa','bg-amber-100 text-amber-700','Dalam Analisis',1],['bg-red-600','Siti Nurhaliza (28th)','Siti Nurhaliza','BC-2026-0912','Profil Lipid / Kolesterol','bg-blue-100 text-blue-700','Menunggu Analis',0],['bg-yellow-400','Budi Santoso (45th)','Budi Santoso','BC-2026-0913','Fungsi Hati & Kidney MCU','bg-emerald-100 text-emerald-700','Tervalidasi',-1]];
 const LAB=[['hb','Hemoglobin (Hb)',13,17.5,'13.0 - 17.5 g/dL',14.2,.1],['wbc','Leukosit (WBC)',4.5,11,'4.5 - 11.0 10^3/µL',13.5,.1],['glu','Glukosa Darah Puasa',70,99,'70 - 99 mg/dL',95,1]];
-const B='absolute right-2 top-2 text-[9px] font-bold px-1.5 py-0.5 rounded ';
-let cat='all';
-const $=id=>document.getElementById(id), idr=n=>'Rp '+n.toLocaleString('id-ID');
+let cat='all',sel='LAB-8892',rf='Semua';
 
 $('cats').innerHTML=CATS.map(c=>`<button onclick="setCat('${c[0]}')" class="bg-white p-5 rounded-2xl shadow-sm border border-pk-100 flex flex-col items-center gap-3 hover:border-pk-400 hover:shadow-md transition"><span class="w-14 h-14 ${c[3]} rounded-2xl flex items-center justify-center text-xl"><i class="fas ${c[2]}"></i></span><b class="text-sm text-slate-700">${c[1]}</b></button>`).join('');
-
-function renderPackages(){
- const q=$('patient-search-input').value.toLowerCase();
- $('packages-list').innerHTML=PKGS.filter(p=>(cat==='all'||p.cat===cat)&&p.k.includes(q)).map(p=>`<article class="bg-white rounded-2xl p-5 shadow-sm border border-pk-100 hover:shadow-lg transition flex flex-col">
- <div class="flex justify-between items-start gap-2"><span class="${p.tc} text-[10px] font-bold px-2 py-0.5 rounded-md border">${p.tag}</span><span class="bg-pk-50 text-pk-700 text-[11px] px-2 py-1 rounded-lg whitespace-nowrap"><i class="fas fa-clock mr-1"></i>${p.t}</span></div>
- <h4 class="font-bold mt-3">${p.n}</h4><p class="text-xs text-slate-500 mt-1 flex-1">${p.d}</p>
- <div class="mt-4 pt-3 border-t border-pk-100 flex justify-between items-center"><div><span class="text-[11px] text-slate-400 line-through">${idr(p.o)}</span><div class="text-lg font-extrabold text-pk-700">${idr(p.p)}</div></div><button onclick="openBooking('${p.book||p.n}',${p.p})" class="bg-pk-500 hover:bg-pk-600 text-white font-semibold px-4 py-2 rounded-xl text-sm">Pesan Now</button></div></article>`).join('')||'<p class="text-sm text-slate-400 py-8 md:col-span-3 text-center">Tes tidak ditemukan 🌸</p>';
-}
+function renderPackages(){const q=$('patient-search-input').value.toLowerCase();
+ $('packages-list').innerHTML=PKGS.filter(p=>(cat==='all'||p.cat===cat)&&p.k.includes(q)).map(p=>`<article class="bg-white rounded-2xl p-5 shadow-sm border border-pk-100 hover:shadow-lg transition flex flex-col"><div class="flex justify-between items-start gap-2"><span class="${p.tc} text-[10px] font-bold px-2 py-0.5 rounded-md border">${p.tag}</span><span class="bg-pk-50 text-pk-700 text-[11px] px-2 py-1 rounded-lg whitespace-nowrap"><i class="fas fa-clock mr-1"></i>${p.t}</span></div><h4 class="font-bold mt-3">${p.n}</h4><p class="text-xs text-slate-500 mt-1 flex-1">${p.d}</p><div class="mt-4 pt-3 border-t border-pk-100 flex justify-between items-center"><div><span class="text-[11px] text-slate-400 line-through">${idr(p.o)}</span><div class="text-lg font-extrabold text-pk-700">${idr(p.p)}</div></div><button onclick="openBooking('${p.n}',${p.p})" class="bg-pk-500 hover:bg-pk-600 text-white font-semibold px-4 py-2 rounded-xl text-sm">Pesan Sekarang</button></div></article>`).join('')||'<p class="text-sm text-slate-400 py-8 md:col-span-3 text-center">Tes tidak ditemukan 🌸</p>'}
 function setCat(c){cat=c;renderPackages();$('paket').scrollIntoView()}
 function resetFilters(){$('patient-search-input').value='';cat='all';renderPackages()}
 
-$('queue-list').innerHTML=Q.map(s=>`<div class="bg-white rounded-2xl p-4 border border-pk-100 shadow-sm"><div class="flex justify-between items-start gap-2"><div>
- <div class="flex items-center gap-1.5"><span class="tube ${s[0]}"></span><h4 class="font-bold text-sm">${s[1]}</h4></div>
- <p class="text-[11px] text-slate-500 mt-1"><i class="fas fa-barcode mr-1"></i><span class="font-mono font-bold text-slate-700">${s[3]}</span></p>
- <span class="inline-block mt-1.5 bg-pk-50 text-pk-700 text-[10px] px-2 py-0.5 rounded font-medium">${s[4]}</span></div>
- <div class="text-right"><span class="${s[5]} text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">${s[6]}</span>
- ${s[7]>=0?`<button onclick="selectPatient('${s[2]}','${s[3]}')" class="block ml-auto mt-2 text-[11px] ${s[7]?'bg-pk-500 text-white':'bg-pk-100 text-pk-700'} font-semibold px-3 py-1.5 rounded-lg">Input Hasil <i class="fas fa-edit text-[9px]"></i></button>`:'<span class="block mt-2 text-[11px] text-emerald-600 font-bold"><i class="fas fa-check-circle"></i> Selesai</span>'}</div></div></div>`).join('');
+// ---- Hasil Lab
+function renderResults(){
+ $('res-filter').innerHTML=['Semua','Hematologi','Screening'].map(f=>`<button onclick="rf='${f}';renderResults()" class="px-3 py-1.5 rounded-full ${rf===f?'bg-pk-500 text-white':'bg-white text-pk-700 border border-pk-200'}">${f}</button>`).join('');
+ const L=RES.filter(r=>rf==='Semua'||r.kind===rf);
+ $('res-list').innerHTML=L.map(r=>{const ab=r.items.filter(i=>flag(i)[0]!=='NORMAL').length;
+ return `<button onclick="sel='${r.ref}';renderResults()" class="w-full text-left bg-white rounded-2xl p-4 border ${sel===r.ref?'border-pk-500 ring-2 ring-pk-200':'border-pk-100'} shadow-sm"><div class="flex justify-between items-start gap-2"><div><h4 class="font-bold text-sm">${r.title}</h4><p class="text-[11px] text-slate-500 mt-0.5">${r.date} • <span class="font-mono">${r.ref}</span></p></div><span class="${ab?'bg-amber-100 text-amber-700':'bg-emerald-100 text-emerald-700'} text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">${ab?ab+' perlu perhatian':'Normal'}</span></div></button>`}).join('')||'<p class="text-sm text-slate-400 text-center py-6">Belum ada hasil.</p>';
+ const r=RES.find(x=>x.ref===sel)||L[0];if(!r)return;
+ $('res-detail').innerHTML=`<div class="flex flex-wrap justify-between gap-3 border-b border-pk-100 pb-3"><div><h3 class="font-bold text-lg">${r.title}</h3><p class="text-xs text-slate-500">Ref: <span class="font-mono">${r.ref}</span> • ${r.date}<br>Pasien: Diva Keren • Dokter: dr. Siska Febriani, Sp.PK</p></div><button onclick="downloadResult('${r.ref}')" class="self-start bg-pk-500 hover:bg-pk-600 text-white text-sm font-semibold px-4 py-2 rounded-xl"><i class="fas fa-download mr-1.5"></i>Unduh</button></div>
+ <div class="overflow-x-auto"><table class="w-full text-sm mt-3 min-w-[420px]"><thead><tr class="text-[11px] uppercase text-slate-400 text-left"><th class="py-2">Parameter</th><th>Hasil</th><th>Rujukan</th><th>Status</th></tr></thead><tbody>${r.items.map(i=>{const f=flag(i);return `<tr class="border-t border-pk-50"><td class="py-2.5 font-medium">${i[0]}</td><td><b>${i[1]}</b> <span class="text-xs text-slate-400">${i[2]}</span></td><td class="text-xs text-slate-500">${i[3]} - ${i[4]}</td><td><span class="${f[1]} text-[10px] font-bold px-2 py-0.5 rounded">${f[0]}</span></td></tr>`}).join('')}</tbody></table></div>
+ <div class="mt-4 bg-pk-50 rounded-xl p-3 text-sm"><b class="text-pk-700 text-xs uppercase">Catatan Dokter</b><p class="mt-1 text-slate-600">${r.note}</p></div>
+ <p class="text-[11px] text-emerald-600 mt-3"><i class="fas fa-circle-check"></i> Divalidasi tanda tangan digital ATLM</p>`}
+function downloadResult(ref){const r=RES.find(x=>x.ref===ref);
+ const t=`LABMOBILE INDONESIA\nLaporan Hasil Pemeriksaan Laboratorium\n${'='.repeat(52)}\nNo. Referensi : ${r.ref}\nPemeriksaan   : ${r.title}\nNama Pasien   : Diva Keren\nTanggal       : ${r.date}\nDokter        : dr. Siska Febriani, Sp.PK\n${'-'.repeat(52)}\n`+r.items.map(i=>`${i[0].padEnd(24)}${String(i[1]).padEnd(8)}${i[2].padEnd(9)}${i[3]}-${i[4]} (${flag(i)[0]})`).join('\n')+`\n${'-'.repeat(52)}\nCatatan: ${r.note}\n[VALIDATED BY LABMOBILE ATLM DIGITAL CERTIFICATE]`;
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));a.download='Hasil_Lab_'+ref+'.txt';a.click()}
 
-$('lab-fields').innerHTML=LAB.map((l,i)=>`<div class="${i===2?'sm:col-span-2':''}"><div class="flex justify-between text-xs mb-1"><label class="font-semibold text-slate-700">${l[1]}</label><span class="text-slate-400 text-[10px]">Rujukan: ${l[4]}</span></div>
- <div class="relative"><input type="number" id="v-${l[0]}" value="${l[5]}" step="${l[6]}" oninput="checkRanges()" class="w-full text-sm p-2.5 pr-28 border border-pk-200 rounded-xl focus:ring-2 focus:ring-pk-300 outline-none font-semibold"><span id="b-${l[0]}"></span></div></div>`).join('');
+// ---- Kontak
+$('faq').innerHTML=FAQ.map(f=>`<details class="py-2.5"><summary class="flex justify-between gap-3 font-semibold text-slate-700">${f[0]}<i class="fas fa-chevron-down chev text-pk-400 text-xs mt-1 transition"></i></summary><p class="text-xs text-slate-500 mt-2">${f[1]}</p></details>`).join('');
+function sendContact(){const m=$('c-pesan').value.trim(),i=$('c-info');i.classList.remove('hidden');
+ if(!m){i.className='text-sm text-red-700 bg-red-50 rounded-xl p-3';i.textContent='Mohon tulis pesan terlebih dahulu.';return}
+ i.className='text-sm text-emerald-700 bg-emerald-50 rounded-xl p-3';i.textContent='Terima kasih, '+($('c-nama').value||'Pasien')+'. Pesan Anda ('+$('c-topik').value+') sudah kami terima. Mengarahkan Anda ke WhatsApp untuk mengirim pesan...';window.open('https://wa.me/6285340477177?text='+encodeURIComponent('Halo LabMobile, saya '+($('c-nama').value||'Pasien')+'.\nTopik: '+$('c-topik').value+'\n'+m),'_blank');$('c-pesan').value=''}
+
+// ---- Nakes
+$('queue-list').innerHTML=Q.map(s=>`<div class="bg-white rounded-2xl p-4 border border-pk-100 shadow-sm"><div class="flex justify-between items-start gap-2"><div><div class="flex items-center gap-1.5"><span class="tube ${s[0]}"></span><h4 class="font-bold text-sm">${s[1]}</h4></div><p class="text-[11px] text-slate-500 mt-1"><i class="fas fa-barcode mr-1"></i><span class="font-mono font-bold text-slate-700">${s[3]}</span></p><span class="inline-block mt-1.5 bg-pk-50 text-pk-700 text-[10px] px-2 py-0.5 rounded font-medium">${s[4]}</span></div><div class="text-right"><span class="${s[5]} text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">${s[6]}</span>${s[7]>=0?`<button onclick="selectPatient('${s[2]}','${s[3]}')" class="block ml-auto mt-2 text-[11px] ${s[7]?'bg-pk-500 text-white':'bg-pk-100 text-pk-700'} font-semibold px-3 py-1.5 rounded-lg">Input Hasil <i class="fas fa-edit text-[9px]"></i></button>`:'<span class="block mt-2 text-[11px] text-emerald-600 font-bold"><i class="fas fa-check-circle"></i> Selesai</span>'}</div></div></div>`).join('');
+$('lab-fields').innerHTML=LAB.map((l,i)=>`<div class="${i===2?'sm:col-span-2':''}"><div class="flex justify-between text-xs mb-1"><label class="font-semibold text-slate-700">${l[1]}</label><span class="text-slate-400 text-[10px]">Rujukan: ${l[4]}</span></div><div class="relative"><input type="number" id="v-${l[0]}" value="${l[5]}" step="${l[6]}" oninput="checkRanges()" class="w-full text-sm p-2.5 pr-28 border border-pk-200 rounded-xl focus:ring-2 focus:ring-pk-300 outline-none font-semibold"><span id="b-${l[0]}"></span></div></div>`).join('');
 function checkRanges(){LAB.forEach(l=>{const v=parseFloat($('v-'+l[0]).value),b=$('b-'+l[0]);let c,t;
  if(v<l[2]){c='bg-amber-100 text-amber-700';t='RENDAH'}else if(v>l[3]){c='bg-red-100 text-red-700 animate-pulse';t=l[0]==='wbc'?'TINGGI (KRITIS)':'TINGGI'}else{c='bg-emerald-100 text-emerald-700';t='NORMAL'}
- b.className=B+'!top-3 '+c;b.innerText=isNaN(v)?'':t;$('v-'+l[0]).classList.toggle('text-red-700',v>l[3]);})}
-
-function switchPortal(p){const c=p==='consumer',on='bg-white text-pk-600 shadow-sm',off='text-pk-700';
- $('portal-consumer').classList.toggle('hidden',!c);$('portal-staff').classList.toggle('hidden',c);$('patient-bottom-nav').classList.toggle('hidden',!c);$('nav-links').classList.toggle('md:flex',c);
- $('btn-consumer-mode').className='px-3.5 py-1.5 rounded-full '+(c?on:off);$('btn-staff-mode').className='px-3.5 py-1.5 rounded-full '+(c?off:on);scrollTo(0,0)}
+ b.className='absolute right-2 top-3 text-[9px] font-bold px-1.5 py-0.5 rounded '+c;b.innerText=isNaN(v)?'':t;$('v-'+l[0]).classList.toggle('text-red-700',v>l[3])})}
 function selectPatient(n,b){$('verify-patient-name').innerText=n;$('verify-patient-barcode').innerText=b;$('entry').scrollIntoView({behavior:'smooth',block:'start'})}
+
+// ---- Router
+function go(p,x){
+ document.querySelectorAll('.page').forEach(e=>e.classList.toggle('hidden',e.id!=='page-'+p));
+ const staff=p==='staff',on='bg-white text-pk-600 shadow-sm',off='text-pk-700';
+ $('btn-consumer-mode').className='px-3.5 py-1.5 rounded-full '+(staff?off:on);$('btn-staff-mode').className='px-3.5 py-1.5 rounded-full '+(staff?on:off);
+ $('bottom-nav').classList.toggle('hidden',staff);$('nav-links').classList.toggle('md:flex',!staff);
+ document.querySelectorAll('[data-p]').forEach(b=>{const a=b.dataset.p===p;b.classList.toggle('nav-on',a);if(b.closest('#bottom-nav'))b.classList.toggle('text-slate-400',!a)});
+ if(p==='hasil'){if(x)sel=x;rf='Semua';renderResults()}
+ scrollTo(0,0);if(p==='home'&&x)setTimeout(()=>$(x).scrollIntoView(),30);
+ try{history.replaceState(null,'','#'+p)}catch(e){}}
 function openModal(id){$(id).classList.remove('hidden');$(id).classList.add('flex')}
 function closeModal(id){$(id).classList.add('hidden');$(id).classList.remove('flex')}
 function openBooking(n,p){$('modal-package-title').innerText='Reservasi: '+n;$('modal-package-price').innerText=idr(p);openModal('modal-booking')}
-function confirmBooking(){closeModal('modal-booking');alert('✅ Reservasi Tes Laboratorium Berhasil! Petugas kami akan menghubungi Anda melalui Whatsapp.')}
-function approveAndSignResult(){alert('🎉 Hasil Laboratorium berhasil diverifikasi & ditandatangani secara digital! Hasil otomatis terkirim ke aplikasi Pasien.')}
-function downloadMockPDF(ref){
- const t=`===================================================
-                LABMOBILE INDONESIA
-        Laporan Hasil Pemeriksaan Laboratorium
-===================================================
-No. Referensi : ${ref}
-Nama Pasien   : Ahmad Rizky (L, 32 Tahun)
-Tanggal Tes   : 18 Oktober 2026
-Dokter Penanggung Jawab : dr. Siska Febriani, Sp.PK
----------------------------------------------------
-Hemoglobin (Hb)       14.2    g/dL     13.0 - 17.5 (Normal)
-Leukosit (WBC)        8.5     10^3/uL  4.5 - 11.0  (Normal)
-Trombosit             250     10^3/uL  150 - 450   (Normal)
-Glukosa Darah Puasa   92      mg/dL    70 - 99     (Normal)
----------------------------------------------------
-[VALIDATED BY LABMOBILE ATLM DIGITAL CERTIFICATE]`;
- const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));a.download='Hasil_Lab_'+ref+'.txt';a.click();}
-switchPortal('consumer');renderPackages();checkRanges();
+renderPackages();checkRanges();renderResults();
+const h=location.hash.slice(1);go(['hasil','kontak','staff'].includes(h)?h:'home');
 </script>
 </body>
 </html>
